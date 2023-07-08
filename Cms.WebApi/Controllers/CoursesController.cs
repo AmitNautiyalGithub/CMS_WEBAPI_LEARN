@@ -6,10 +6,14 @@ namespace Cms.WebApi.Controllers
     [Route("[controller]")]
     public class CoursesController : ControllerBase
     {
-        public CoursesController()
-        {
+        public readonly ICMSRepository CmsRepository { get; }
 
+        public CoursesController(ICMSRepository cmsRepository)
+        {
+            CmsRepository = cmsRepository;
         }
+
+
 
         [HttpGet]
         public string GetCourses()
