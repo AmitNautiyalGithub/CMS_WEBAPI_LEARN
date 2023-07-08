@@ -44,15 +44,31 @@ namespace Cms.WebApi.Controllers
         //     }
         // }
 
-        //Return type - Approach 2  - IActionResult
+        // //Return type - Approach 2  - IActionResult
+        // [HttpGet]
+        // public IActionResult GetCourses()
+        // {
+        //     try
+        //     {
+        //         IEnumerable<Course> courses = _cmsRepository.GetAllCourses();
+        //         var result = MapCourseToCourseDto(courses);
+        //         return Ok(result);
+        //     }
+        //     catch (System.Exception ex)
+        //     {
+        //         return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //     }
+        // }
+
+        //Return type - Approach 3  - ActionResult<T>
         [HttpGet]
-        public IActionResult GetCourses()
+        public ActionResult<IEnumerable<CourseDto>> GetCourses()
         {
             try
             {
                 IEnumerable<Course> courses = _cmsRepository.GetAllCourses();
                 var result = MapCourseToCourseDto(courses);
-                return Ok(result);
+                return result.ToList(); // convert to support ActionResult<T>
             }
             catch (System.Exception ex)
             {
