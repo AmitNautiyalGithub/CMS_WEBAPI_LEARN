@@ -3,6 +3,7 @@ using Cms.Data.Repository;
 using Cms.WebApi.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace Cms.WebApi.Controllers
 {
@@ -19,7 +20,7 @@ namespace Cms.WebApi.Controllers
 
 
 
-        //Approch 1.
+        //Return type - Approach 1 - Primitive or Complex type
         // [HttpGet]
         // public IEnumerable<Course> GetCourses()
         // {
@@ -27,18 +28,35 @@ namespace Cms.WebApi.Controllers
         // }
 
 
+        //Return type - Approach 1 - Primitive or Complex type
+        // [HttpGet]
+        // public IEnumerable<CourseDto> GetCourses()
+        // {
+        //     try
+        //     {
+        //         IEnumerable<Course> courses = _cmsRepository.GetAllCourses();
+        //         var result = MapCourseToCourseDto(courses);
+        //         return result;
+        //     }
+        //     catch (System.Exception)
+        //     {
+        //         throw;
+        //     }
+        // }
+
+        //Return type - Approach 2  - IActionResult
         [HttpGet]
-        public IEnumerable<CourseDto> GetCourses()
+        public IActionResult GetCourses()
         {
             try
             {
                 IEnumerable<Course> courses = _cmsRepository.GetAllCourses();
                 var result = MapCourseToCourseDto(courses);
-                return result;
+                return Ok(result);
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                throw;
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
