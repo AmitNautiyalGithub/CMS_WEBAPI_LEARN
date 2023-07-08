@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Cms.Data.Repository
 {
@@ -8,6 +9,11 @@ namespace Cms.Data.Repository
         public IEnumerable<Course> GetAllCourses()
         {
             return null;
+        }
+
+        public Task<IEnumerable<Course>> GetAllCoursesAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

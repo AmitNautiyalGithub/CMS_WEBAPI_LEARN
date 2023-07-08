@@ -4,6 +4,7 @@ using Cms.WebApi.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace Cms.WebApi.Controllers
 {
@@ -17,8 +18,6 @@ namespace Cms.WebApi.Controllers
         {
             _cmsRepository = cmsRepository;
         }
-
-
 
         //Return type - Approach 1 - Primitive or Complex type
         // [HttpGet]
@@ -60,13 +59,29 @@ namespace Cms.WebApi.Controllers
         //     }
         // }
 
-        //Return type - Approach 3  - ActionResult<T>
+        // //Return type - Approach 3  - ActionResult<T>
+        // [HttpGet]
+        // public ActionResult<IEnumerable<CourseDto>> GetCourses()
+        // {
+        //     try
+        //     {
+        //         IEnumerable<Course> courses = _cmsRepository.GetAllCourses();
+        //         var result = MapCourseToCourseDto(courses);
+        //         return result.ToList(); // convert to support ActionResult<T>
+        //     }
+        //     catch (System.Exception ex)
+        //     {
+        //         return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //     }
+        // }
+
+
         [HttpGet]
-        public ActionResult<IEnumerable<CourseDto>> GetCourses()
+        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCoursesAsync()
         {
             try
             {
-                IEnumerable<Course> courses = _cmsRepository.GetAllCourses();
+                IEnumerable<Course> courses = await _cmsRepository.GetAllCoursesAsync();
                 var result = MapCourseToCourseDto(courses);
                 return result.ToList(); // convert to support ActionResult<T>
             }
@@ -75,6 +90,8 @@ namespace Cms.WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+
 
         // Custom mapper function
         private CourseDto MapCourseToCourseDto(Course course)
@@ -87,7 +104,6 @@ namespace Cms.WebApi.Controllers
                 CourseType = (COURSE_TYPE_Dto)course.CourseType,
             };
         }
-
 
         private IEnumerable<CourseDto> MapCourseToCourseDto(IEnumerable<Course> courses)
         {
